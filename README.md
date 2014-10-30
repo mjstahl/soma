@@ -34,30 +34,27 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
     + True not -> False.
 
     + (t True) & aBool ->
-        aBool ifTrue: { t } ifFalse: { False }.
+      aBool ifTrue: { t } ifFalse: { False }.
 
     + (t True) | aBool -> t.
 
     + (t True) ^ aBool ->
-        aBool ifTrue: { False } ifFalse: { t }.
+      aBool ifTrue: { False } ifFalse: { t }.
 ```
 ## Getting Started
 ```bash
-    $ git clone https://github.com/socialmachines/socialmachines.git
-    $ mkdir ~/socialmachines/bin ~/socialmachines/pkg
-    $ export GOPATH=$GOROOT:$HOME/socialmachines
-    $ export PATH=$PATH:$GOROOT/bin
-```
-
-#### Compilation & Execution
-```bash
-    $ cd ~/socialmachines/src/soma
+    $ go get github.com/socialmachines/soma
+    $ cd $GOPATH/src/github.com/socialmachines/soma
     $ go install
+
+    # ensure $GOROOT/bin is on your path, if not
+    $ export PATH=$PATH:$GOROOT/bin
     $ soma
 ```
+
 #### Testing
 ```bash
-    $ cd ~/socialmachines/src/test
+    $ cd $GOPATH/src/github.com/socialmachines/soma/test
     $ go test
 ```
 

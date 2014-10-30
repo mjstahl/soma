@@ -3,13 +3,13 @@ package cmd
 import (
 	"bufio"
 	"fmt"
+	"github.com/socialmachines/soma/file"
+	"github.com/socialmachines/soma/parse"
+	"github.com/socialmachines/soma/rt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
-	"github.com/socialmachines/soma/file"
-	"github.com/socialmachines/soma/parse"
-	"github.com/socialmachines/soma/rt"
 	"strings"
 )
 
@@ -21,13 +21,13 @@ var ConsoleUsage = `Usage:
 
 Example:
     $ soma console
-    >>> (True) not => false.
+    >>> (True) not -> false.
     >>> ...
     >>> True not
     === False
 
-The Social Machines console supports commands 
-that are evaluated differently than Social 
+The Social Machines console supports commands
+that are evaluated differently than Social
 Machines expressions.
 
 The commands are:
