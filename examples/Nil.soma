@@ -1,0 +1,7 @@
++ Nil isNil -> True.
+
++ Nil isNotNil -> False.
+
++ Nil ifNil: nBlock -> nBlock value.
+
++ (n Nil) ifNotNil: nBlock -> n.

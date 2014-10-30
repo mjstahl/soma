@@ -1,0 +1,24 @@
++ (t True) isNotNil -> t.
+
++ True isNil -> False.
+
++ True ifNotNil: nBlock -> nBlock value.
+
++ True ifNil: nBlock -> Nil.
+
++ True ifFalse: fBlock -> Nil.
+
++ True ifTrue: tBlock -> tBlock value. 
+
++ True ifTrue: tBlock ifFalse: fBlock -> 
+	tBlock value.
+
++ True not -> False.
+
++ (t True) & aBool ->
+	aBool ifTrue: { t } ifFalse: { False }.
+
++ (t True) | aBool -> t.
+
++ (t True) ^ aBool ->
+	aBool ifTrue: { False } ifFalse: { t }.
