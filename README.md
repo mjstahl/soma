@@ -59,6 +59,6 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 ```
 
 ## License
-Social Machines source code is released under the *MIT License* with parts under *Go's BSD-style* license.
+Social Machines source code is released under the *GNU AGPLv3 License* with parts under *Go's BSD-style* license.
 
-Refer to the [legal/MIT](https://github.com/socialmachines/socialmachines/tree/master/legal/MIT) and [legal/BSD](https://github.com/socialmachines/socialmachines/blob/master/legal/BSD) files for more information.
+Refer to the [legal/MIT](https://github.com/socialmachines/soma/tree/master/legal/MIT) and [legal/BSD](https://github.com/socialmachines/soma/tree/master/legal/AGPL) files for more information.
