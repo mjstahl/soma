@@ -3,14 +3,15 @@ package cmd
 import (
 	"bufio"
 	"fmt"
-	"github.com/socialmachines/soma/file"
-	"github.com/socialmachines/soma/parse"
-	"github.com/socialmachines/soma/rt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/socialmachines/soma/file"
+	"github.com/socialmachines/soma/parse"
+	"github.com/socialmachines/soma/rt"
 )
 
 var ConsoleUsage = `Usage:
@@ -21,8 +22,8 @@ var ConsoleUsage = `Usage:
 
 Example:
     $ soma console
-    >>> (True) not -> false.
-    >>> ...
+    >>> + True not -> False.
+	=== True
     >>> True not
     === False
 
@@ -92,7 +93,7 @@ func isConsoleCmd(input string) bool {
 func evalConsoleCmd(input string) {
 	lower := strings.ToLower(input)
 	switch lower {
-	case ":exit", ":quit":
+	case ":exit":
 		os.Exit(0)
 	case ":info":
 		printRuntimeInfo()
@@ -122,7 +123,7 @@ func printRuntimeInfo() {
 	goroutines := runtime.NumGoroutine()
 	fmt.Printf(" |   Objects (Named/Lang/Sys): %d/%d/%d\n", named, heap, goroutines)
 
-	fmt.Printf(" |   Processors Used: %d\n", runtime.NumCPU())
+	fmt.Printf(" |   Cores Used: %d\n", runtime.NumCPU())
 }
 
 func printMemoryInfo() {
@@ -142,7 +143,7 @@ func printObjects() {
 
 		oid := rt.RT.Globals.Values[index]
 		obj := rt.RT.Heap.Values[oid]
-		for behave, _ := range obj.(*rt.Object).Behaviors {
+		for behave := range obj.(*rt.Object).Behaviors {
 			fmt.Printf(" |   %s\n", behave)
 		}
 	}
