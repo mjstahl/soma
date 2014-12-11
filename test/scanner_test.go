@@ -1,9 +1,10 @@
 package test
 
 import (
+	"testing"
+
 	"github.com/socialmachines/soma/file"
 	"github.com/socialmachines/soma/scan"
-	"testing"
 )
 
 func TestUnary(t *testing.T) {
@@ -21,11 +22,14 @@ func TestUnary(t *testing.T) {
 
 func TestBinary(t *testing.T) {
 	received :=
-		`+ True ^ aBool ->
-		   aBool ifTrue: { False } ifFalse: { True }.`
+		`+ (t True) ^ aBool ->
+		   aBool ifTrue: { False } ifFalse: { t }.`
 	expected := []scan.Token{
 		scan.BINARY,
+		scan.LPAREN,
+		scan.IDENT,
 		scan.GLOBAL,
+		scan.RPAREN,
 		scan.BINARY,
 		scan.IDENT,
 		scan.DEFINE,
@@ -36,7 +40,7 @@ func TestBinary(t *testing.T) {
 		scan.RBRACE,
 		scan.KEYWORD,
 		scan.LBRACE,
-		scan.GLOBAL,
+		scan.IDENT,
 		scan.RBRACE,
 		scan.PERIOD,
 	}
