@@ -55,7 +55,7 @@ func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 		p.expect(scan.COMMA)
 		stmts = p.parseStatements(stmts)
 	default:
-		p.error(p.pos, "expected expression, or ',', found '%s'", p.lit)
+		p.error(p.pos, "expected termination to the block or statement. found '%s'", p.lit)
 		p.next()
 	}
 	return stmts
