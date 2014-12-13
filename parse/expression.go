@@ -33,7 +33,7 @@ func (p *Parser) parseMessagePortion(recv rt.Expr) rt.Expr {
 }
 
 // primary :=
-//	ident | global | block | paren_expr
+//	ident | assignment | global | block | paren_expr
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {

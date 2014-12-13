@@ -12,7 +12,6 @@ type Assign struct {
 func (a *Assign) Eval(s *rt.Scope) rt.Value {
 	value := a.Expr.Visit(s)
 	s.Insert(a.Target, value.OID())
-
 	return value
 }
 

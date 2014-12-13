@@ -11,7 +11,7 @@ const (
 	IDENT   // aBool, not
 	KEYWORD // ifTrue:
 
-	ASSIGN // =
+	ASSIGN // :=
 	DEFINE // ->
 
 	LBRACE // {

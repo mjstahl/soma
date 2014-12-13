@@ -126,7 +126,7 @@ func (s *Scanner) scanName() (Token, string) {
 
 func isBinary(ch rune) bool {
 	switch ch {
-		case '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\\', '~':
+		case '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\\', '~', ':':
 		return true
 	}
 	return false
@@ -139,8 +139,11 @@ func (s *Scanner) scanBinary() (Token, string) {
 	}
 
 	bin := string(s.src[offs:s.offset])
-	if bin == "->" {
-		return DEFINE, bin
+	switch bin {
+		case "->":
+			return DEFINE, bin
+		case ":=":
+			return ASSIGN, bin
 	}
 	return BINARY, bin
 }
