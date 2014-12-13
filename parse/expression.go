@@ -52,7 +52,7 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
 	default:
-		p.error(p.pos, "expected identifier, block, array, map, number, or string found '%s'", p.lit)
+		p.error(p.pos, "expected identifier, block, or expression. found '%s'", p.lit)
 		p.next()
 	}
 	return
