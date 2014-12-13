@@ -56,10 +56,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		switch ch {
 		case -1:
 			tok, lit = EOF, "EOF"
-		case '\'':
-			tok, lit = COMMENT, s.scanComment()
-		case '"':
-			tok, lit = STRING, s.scanString()
 		case '=':
 			tok, lit = ASSIGN, "="
 		case '{':
@@ -147,34 +143,6 @@ func (s *Scanner) scanBinary() (Token, string) {
 		return DEFINE, bin
 	}
 	return BINARY, bin
-}
-
-func (s *Scanner) scanComment() string {
-	offs := s.offset - 1
-	for s.ch != '\'' && s.ch != -1 {
-		s.next()
-	}
-
-	if s.ch != '\'' {
-		msg := fmt.Sprintf("expecting single-quote (') to end the comment")
-		s.error(s.offset, msg)
-	}
-	s.next()
-	return string(s.src[offs:s.offset])
-}
-
-func (s *Scanner) scanString() string {
-	offs := s.offset - 1
-	for s.ch != '"' && s.ch != -1 {
-		s.next()
-	}
-
-	if s.ch != '"' {
-		msg := fmt.Sprintf("expecting double-quote (\") to end the string")
-		s.error(s.offset, msg)
-	}
-	s.next()
-	return string(s.src[offs:s.offset])
 }
 
 func (s *Scanner) next() {

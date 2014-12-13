@@ -6,9 +6,6 @@ const (
 	ILLEGAL Token = iota
 	EOF           // EOF
 
-	COMMENT // 'a comment'
-	STRING  // "a string"
-
 	BINARY  // '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\', '~':
 	GLOBAL  // True, False, Nil
 	IDENT   // aBool, not
@@ -32,9 +29,6 @@ const (
 var tokens = [...]string{
 	ILLEGAL: "ILLEGAL",
 	EOF:     "EOF",
-
-	COMMENT: "COMMENT",
-	STRING:  "STRING",
 
 	BINARY:  "BINARY",
 	GLOBAL:  "GLOBAL",

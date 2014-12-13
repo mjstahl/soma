@@ -33,13 +33,10 @@ func (p *Parser) parseMessagePortion(recv rt.Expr) rt.Expr {
 }
 
 // primary :=
-//	comment | ident | global | block | paren_expr
+//	ident | global | block | paren_expr
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
-	case scan.COMMENT:
-		comment := p.expect(scan.COMMENT)
-		recv = &ast.Comment{Text: comment}
 	case scan.IDENT:
 		name := p.expect(scan.IDENT)
 		if p.tok == scan.ASSIGN {
@@ -62,8 +59,7 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 }
 
 func (p *Parser) isPrimary() bool {
-	return p.tok == scan.COMMENT ||
-		p.tok == scan.IDENT ||
+	return p.tok == scan.IDENT ||
 		p.tok == scan.GLOBAL ||
 		p.tok == scan.LBRACE ||
 		p.tok == scan.LPAREN
