@@ -4,20 +4,20 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
 	"github.com/socialmachines/soma/cmd"
 	_ "github.com/socialmachines/soma/lib"
 )
 
 var version = "0.1.0"
 
-var usageText = `Usage: 
+var usageText = `Usage:
     soma [command] [arguments]
 
 The commands are:
 
     console    interact with the runtime
     create     create a Social Machines project
-    eval       evalutate an expression
     get        retrieve a library from a broker
     info       display runtime information
     serve      serve a project to peers
@@ -37,8 +37,6 @@ func main() {
 		cmd.StartConsole(version)
 	case "create":
 		cmd.CreateProject(args[1:])
-	case "eval":
-		cmd.Evaluate(args[1:])
 	case "get":
 		cmd.Get(args[1:])
 	case "help":
