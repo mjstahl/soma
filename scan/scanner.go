@@ -47,24 +47,10 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 	pos = s.file.Pos(s.offset)
 
 	switch ch := s.ch; {
-	case isUpper(ch):
-		tok, lit = GLOBAL, s.scanIdentifier()
-	case isLower(ch):
-		lit = s.scanIdentifier()
-		switch {
-		case s.ch == ':':
-			tok, lit = KEYWORD, lit+":"
-			s.next()
-		default:
-			tok = IDENT
-		}
+	case isLetter(ch):
+		tok, lit = s.scanName()
 	case isBinary(ch):
-		bin := s.scanBinary()
-		if bin == "->" {
-			tok, lit = DEFINE, "->"
-		} else {
-			tok, lit = BINARY, bin
-		}
+		tok, lit = s.scanBinary()
 	default:
 		s.next()
 		switch ch {
@@ -102,57 +88,10 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 	return
 }
 
-func (s *Scanner) next() {
-	if s.rdOffset < len(s.src) {
-		s.offset = s.rdOffset
-		if s.ch == '\n' {
-			s.lineOffset = s.offset
-			s.file.AddLine(s.offset)
-		}
-
-		r, w := rune(s.src[s.rdOffset]), 1
-		switch {
-		case r == 0:
-			s.error(s.offset, "illegal character NULL")
-		case r >= 0x80:
-			// not ASCII
-			r, w = utf8.DecodeRune(s.src[s.rdOffset:])
-			if r == utf8.RuneError && w == 1 {
-				s.error(s.offset, "illegal UTF-8 encoding")
-			}
-		}
-		s.rdOffset += w
-		s.ch = r
-	} else {
-		s.offset = len(s.src)
-		if s.ch == '\n' {
-			s.lineOffset = s.offset
-			s.file.AddLine(s.offset)
-		}
-		s.ch = -1 // eof
-	}
-}
-
 func (s *Scanner) skipWhitespace() {
 	for s.ch == ' ' || s.ch == '\t' || s.ch == '\n' || s.ch == '\r' {
 		s.next()
 	}
-}
-
-func (s *Scanner) scanIdentifier() string {
-	offs := s.offset
-	for isLetter(s.ch) || s.ch == '_' {
-		s.next()
-	}
-	return string(s.src[offs:s.offset])
-}
-
-func (s *Scanner) scanBinary() string {
-	offs := s.offset
-	for isBinary(s.ch) {
-		s.next()
-	}
-	return string(s.src[offs:s.offset])
 }
 
 func isLetter(ch rune) bool {
@@ -167,12 +106,47 @@ func isLower(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || ch >= 0x80 && unicode.IsLetter(ch)
 }
 
+func (s *Scanner) scanName() (Token, string) {
+	scanIdent := func (s *Scanner) string {
+		offs := s.offset
+		for isLetter(s.ch) {
+			s.next()
+		}
+		return string(s.src[offs:s.offset])
+	}
+
+	if isUpper(s.ch) {
+		return GLOBAL, scanIdent(s)
+	}
+
+	lit := scanIdent(s)
+	if s.ch == ':' {
+		s.next()
+		return KEYWORD, lit+":"
+	} else {
+		return IDENT, lit
+	}
+}
+
 func isBinary(ch rune) bool {
 	switch ch {
-	case '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\\', '~':
+		case '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\\', '~':
 		return true
 	}
 	return false
+}
+
+func (s *Scanner) scanBinary() (Token, string) {
+	offs := s.offset
+	for isBinary(s.ch) {
+		s.next()
+	}
+
+	bin := string(s.src[offs:s.offset])
+	if bin == "->" {
+		return DEFINE, bin
+	}
+	return BINARY, bin
 }
 
 func (s *Scanner) scanComment() string {
@@ -201,6 +175,37 @@ func (s *Scanner) scanString() string {
 	}
 	s.next()
 	return string(s.src[offs:s.offset])
+}
+
+func (s *Scanner) next() {
+	if s.rdOffset < len(s.src) {
+		s.offset = s.rdOffset
+		if s.ch == '\n' {
+			s.lineOffset = s.offset
+			s.file.AddLine(s.offset)
+		}
+
+		r, w := rune(s.src[s.rdOffset]), 1
+		switch {
+			case r == 0:
+			s.error(s.offset, "illegal character NULL")
+			case r >= 0x80:
+			// not ASCII
+			r, w = utf8.DecodeRune(s.src[s.rdOffset:])
+			if r == utf8.RuneError && w == 1 {
+				s.error(s.offset, "illegal UTF-8 encoding")
+			}
+		}
+		s.rdOffset += w
+		s.ch = r
+	} else {
+		s.offset = len(s.src)
+		if s.ch == '\n' {
+			s.lineOffset = s.offset
+			s.file.AddLine(s.offset)
+		}
+		s.ch = -1 // eof
+	}
 }
 
 func (s *Scanner) error(offset int, msg string) {
