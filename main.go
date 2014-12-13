@@ -14,15 +14,14 @@ var version = "0.1.0"
 var usageText = `Usage:
     soma [command] [arguments]
 
-The commands are:
+Use "soma help [command]" for more information.
 
+The commands are:
     console    interact with the runtime
     create     create a Social Machines project
     get        retrieve a library from a broker
     info       display runtime information
     serve      serve a project to peers
-
-Use "soma help [command]" for information about that command.
 `
 
 func main() {
