@@ -3,9 +3,10 @@ package scan
 import (
 	"fmt"
 	"path/filepath"
-	"github.com/socialmachines/soma/file"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/socialmachines/soma/file"
 )
 
 type ErrorHandler func(pos file.Position, msg string)
@@ -57,8 +58,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		default:
 			tok = IDENT
 		}
-	case isAccessor(ch):
-		tok, lit = s.scanGetterSetter()
 	case isBinary(ch):
 		bin := s.scanBinary()
 		if bin == "->" {
@@ -75,13 +74,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = COMMENT, s.scanComment()
 		case '"':
 			tok, lit = STRING, s.scanString()
-		case ':':
-			if s.ch == '=' {
-				s.next()
-				tok, lit = ASSIGN, ":="
-			}
-		case '$':
-			tok, lit = SYMBOL, "$"+s.scanSymbol()
+		case '=':
+			tok, lit = ASSIGN, "="
 		case '{':
 			tok, lit = LBRACE, "{"
 		case '}':
@@ -153,45 +147,12 @@ func (s *Scanner) scanIdentifier() string {
 	return string(s.src[offs:s.offset])
 }
 
-func (s *Scanner) scanGetterSetter() (token Token, lit string) {
-	s.next()
-	lit = "@" + s.scanIdentifier()
-	switch {
-	case s.ch == ':':
-		token, lit = SETTER, lit+":"
-		s.next()
-	default:
-		token = GETTER
-	}
-	return
-}
-
 func (s *Scanner) scanBinary() string {
 	offs := s.offset
 	for isBinary(s.ch) {
 		s.next()
 	}
 	return string(s.src[offs:s.offset])
-}
-
-func (s *Scanner) scanSymbol() string {
-	switch ch := s.ch; {
-	case isUpper(ch), isLower(ch):
-		return s.scanIdentifier()
-	case isBinary(ch):
-		return s.scanBinary()
-	case isAccessor(ch):
-		_, lit := s.scanGetterSetter()
-		return lit
-	default:
-		msg := fmt.Sprintf("expecting identifier, binary, or accessor; found '%c'", s.ch)
-		s.error(s.offset, msg)
-	}
-	return ""
-}
-
-func isAccessor(ch rune) bool {
-	return ch == '@'
 }
 
 func isLetter(ch rune) bool {
@@ -221,7 +182,7 @@ func (s *Scanner) scanComment() string {
 	}
 
 	if s.ch != '\'' {
-		msg := fmt.Sprintf("expecting double-quote (') to end the comment")
+		msg := fmt.Sprintf("expecting single-quote (') to end the comment")
 		s.error(s.offset, msg)
 	}
 	s.next()
@@ -230,12 +191,12 @@ func (s *Scanner) scanComment() string {
 
 func (s *Scanner) scanString() string {
 	offs := s.offset - 1
-	for s.ch != '\'' && s.ch != -1 {
+	for s.ch != '"' && s.ch != -1 {
 		s.next()
 	}
 
-	if s.ch != '\'' {
-		msg := fmt.Sprintf("expecting single-quote (') to end the string")
+	if s.ch != '"' {
+		msg := fmt.Sprintf("expecting double-quote (\") to end the string")
 		s.error(s.offset, msg)
 	}
 	s.next()

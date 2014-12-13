@@ -9,9 +9,7 @@ import (
 func (p *Parser) isMessageStart() bool {
 	return p.tok == scan.IDENT ||
 		p.tok == scan.BINARY ||
-		p.tok == scan.KEYWORD ||
-		p.tok == scan.GETTER ||
-		p.tok == scan.SETTER
+		p.tok == scan.KEYWORD
 }
 
 // messages :=
@@ -23,14 +21,12 @@ func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
 	var msg rt.Expr
 
 	switch p.tok {
-	case scan.IDENT, scan.GETTER:
+	case scan.IDENT:
 		msg = p.parseUnaryMessage(recv)
 	case scan.BINARY:
 		msg = p.parseBinaryMessage(recv)
 	case scan.KEYWORD:
 		msg = p.parseKeywordMessage(recv)
-	case scan.SETTER:
-		msg = p.parseSetterMessage(recv)
 	default:
 		return recv
 	}
@@ -46,8 +42,6 @@ func (p *Parser) parseUnaryMessage(recv rt.Expr) rt.Expr {
 	switch p.tok {
 	case scan.IDENT:
 		name = p.expect(scan.IDENT)
-	case scan.GETTER:
-		name = p.expect(scan.GETTER)
 	}
 	return &ast.UnaryMessage{recv, name}
 }
@@ -91,14 +85,6 @@ func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
 		km.Args = append(km.Args, p.parseKeywordArgument())
 	}
 	return km
-}
-
-func (p *Parser) parseSetterMessage(recv rt.Expr) rt.Expr {
-	sm := &ast.KeywordMessage{Receiver: recv}
-	sm.Behavior = sm.Behavior + p.expect(scan.SETTER)
-	sm.Args = append(sm.Args, p.parseKeywordArgument())
-
-	return sm
 }
 
 // keyword_argument :=

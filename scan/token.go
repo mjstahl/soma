@@ -6,18 +6,15 @@ const (
 	ILLEGAL Token = iota
 	EOF           // EOF
 
-	COMMENT // "a comment"
-	STRING  // 'a string'
+	COMMENT // 'a comment'
+	STRING  // "a string"
 
 	BINARY  // '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\', '~':
-	GETTER  // @attribute
 	GLOBAL  // True, False, Nil
 	IDENT   // aBool, not
 	KEYWORD // ifTrue:
-	SETTER  // @attribute:
-	SYMBOL  // $%, $True, $aBool
 
-	ASSIGN // :=
+	ASSIGN // =
 	DEFINE // ->
 
 	LBRACE // {
@@ -40,12 +37,9 @@ var tokens = [...]string{
 	STRING:  "STRING",
 
 	BINARY:  "BINARY",
-	GETTER:  "GETTER",
 	GLOBAL:  "GLOBAL",
 	IDENT:   "IDENT",
 	KEYWORD: "KEYWORD",
-	SETTER:  "SETTER",
-	SYMBOL:  "SYMBOL",
 
 	ASSIGN: ":=",
 	DEFINE: "->",
