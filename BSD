@@ -1,8 +1,4 @@
-
-parse/interface.go, scan/errors.go, scan/scanner.go, scan/token.go follow under
-the following copyright and BSD-style license.
-
-===============================================================================
+parse/interface.go and scan/errors.go are licensed under the following:
 
 Copyright (c) 2013 Mark Stahl. All rights reserved.
 Copyright (c) 2012 The Go Authors. All rights reserved.
