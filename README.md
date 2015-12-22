@@ -33,13 +33,13 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 
     + True not -> False.
 
-    + (t True) & aBool ->
-      aBool ifTrue: { t } ifFalse: { False }.
+    + True & aBool ->
+      aBool ifTrue: { self } ifFalse: { False }.
 
-    + (t True) | aBool -> t.
+    + True | aBool -> self.
 
-    + (t True) ^ aBool ->
-      aBool ifTrue: { False } ifFalse: { t }.
+    + True ^ aBool ->
+      aBool ifTrue: { False } ifFalse: { self }.
 ```
 ## Getting Started
 ```bash
@@ -59,6 +59,6 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 ```
 
 ## License
-Social Machines source code is released under the *GNU AGPLv3 License* with parts under *Go's BSD-style* license.
+Unless otherwise specified all source code is licensed under the [MIT license](https://github.com/socialmachines/soma/tree/master/MIT).
 
-Refer to the [legal/MIT](https://github.com/socialmachines/soma/tree/master/MIT) and [legal/BSD](https://github.com/socialmachines/soma/tree/master/BSD) files for more information.
+`parse/interface.go` and `scan/errors.go` are licensed under [Go's BSD license](https://golang.org/LICENSE).
